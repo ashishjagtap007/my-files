@@ -1,0 +1,83 @@
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+entity mux4to1 is
+ Port (
+ I : in STD_LOGIC_VECTOR(3 downto 0);
+ S : in STD_LOGIC_VECTOR(1 downto 0);
+ Y : out STD_LOGIC
+ );
+end mux4to1;
+architecture Behavioral of mux4to1 is
+begin
+ process (I, S)
+ begin
+ case S is
+ when "00" =>
+ Y <= I(0);
+ when "01" =>
+ Y <= I(1);
+ when "10" =>
+ Y <= I(2);
+ when "11" =>
+ Y <= I(3);
+ when others =>
+ Y <= '0';
+ end case;
+ end process;
+end Behavioral;
+
+
+Testbench Code: -
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+entity mux4to1_tb is
+end mux4to1_tb;
+architecture Behavioral of mux4to1_tb is
+ component mux4to1
+ Port (
+ I : in STD_LOGIC_VECTOR(3 downto 0);
+ S : in STD_LOGIC_VECTOR(1 downto 0);
+ Y : out STD_LOGIC
+ );
+ end component;
+ signal I : STD_LOGIC_VECTOR(3 downto 0) := "0000";
+ signal S : STD_LOGIC_VECTOR(1 downto 0) := "00";
+ signal Y : STD_LOGIC;
+begin
+ uut: mux4to1
+ port map (
+ I => I,
+ S => S,
+ Y => Y
+ );
+ stim_process: process
+ begin
+ I <= "0001";
+ S <= "00";
+ wait for 20 ns;
+ S <= "01";
+ wait for 20 ns;
+ S <= "10";
+ wait for 20 ns;
+ S <= "11";
+ wait for 20 ns;
+ I <= "1010";
+ S <= "00";
+ wait for 20 ns;
+ S <= "01";
+ wait for 20 ns;
+ S <= "10";
+ wait for 20 ns;
+ S <= "11";
+ wait for 20 ns;
+ wait;
+ end process;
+end Behavioral;
+
+NET "I<0>" LOC = "P6";
+NET "I<1>" LOC = "P58";
+NET "I<2>" LOC = "P64";
+NET "I<3>" LOC = "P75";
+NET "S<0>" LOC = "P141";
+NET "S<1>" LOC = "P137";
+NET "Y" LOC = "P7";
